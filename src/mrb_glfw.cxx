@@ -129,7 +129,7 @@ mrb_value window_size_get(mrb_state *M, mrb_value self) {
 
 }
 
-extern "C" void mrb_mruby_glfw_gem_init(mrb_state* M) {
+extern "C" void mrb_mruby_glfw3_gem_init(mrb_state* M) {
   // mrb_assert(not err_M);
   err_M = M;
   glfwSetErrorCallback(&error_func);
@@ -183,7 +183,7 @@ extern "C" void mrb_mruby_glfw_gem_init(mrb_state* M) {
   }
 }
 
-extern "C" void mrb_mruby_glfw_gem_final(mrb_state *M) {
+extern "C" void mrb_mruby_glfw3_gem_final(mrb_state *M) {
   mrb_value objs = mrb_iv_get(M, mrb_obj_value(mrb_module_get(M, "GLFW")), mrb_intern_lit(M, "__glfw_objects"));
   for (mrb_int i = 0; i < RARRAY_LEN(objs); ++i) {
     mrb_value const obj = RARRAY_PTR(objs)[i];
