@@ -127,6 +127,16 @@ mrb_value window_size_get(mrb_state *M, mrb_value self) {
   return mrb_ary_new_from_values(M, 2, ret);
 }
 
+mrb_value default_window_hints(mrb_state*, mrb_value self) {
+  return glfwDefaultWindowHints(), self;
+}
+
+mrb_value window_hint(mrb_state *M, mrb_value self) {
+  mrb_int target, hint;
+  mrb_get_args(M, "ii", &target, &hint);
+  return glfwWindowHint(target, hint), self;
+}
+
 }
 
 extern "C" void mrb_mruby_glfw3_gem_init(mrb_state* M) {
@@ -148,10 +158,10 @@ extern "C" void mrb_mruby_glfw3_gem_init(mrb_state* M) {
   mrb_define_class_method(M, mod, "time=", time_set, MRB_ARGS_REQ(1));
   mrb_define_class_method(M, mod, "poll_events", poll_events, MRB_ARGS_NONE());
   mrb_define_class_method(M, mod, "wait_events", wait_events, MRB_ARGS_NONE());
+  mrb_define_class_method(M, mod, "default_window_hints", default_window_hints, MRB_ARGS_NONE());
+  mrb_define_class_method(M, mod, "window_hint", window_hint, MRB_ARGS_REQ(2));
 
   /*
-  mrb_define_class_method(M, mod, "default_window_hints", default_window_hints MRB_ARGS_NONE());
-  mrb_define_class_method(M, mod, "window_hint", window_hint, MRB_ARGS_REQ(2));
   mrb_define_class_method(M, mod, "monitors", monitors, MRB_ARGS_NONE());
   mrb_define_class_method(M, mod, "primary_moniter", primary_moniter, MRB_ARGS_NONE());
   mrb_define_class_method(M, mod, "set_monitor_callback", set_monitor_callback, MRB_ARGS_BLOCK());
