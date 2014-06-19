@@ -127,6 +127,31 @@ mrb_value window_size_get(mrb_state *M, mrb_value self) {
   return mrb_ary_new_from_values(M, 2, ret);
 }
 
+mrb_value window_size_set(mrb_state *M, mrb_value self) {
+  mrb_value ary;
+  mrb_get_args(M, "A", &ary);
+  glfwSetWindowSize(get_window(M, self),
+                    mrb_int(M, mrb_ary_entry(ary, 0)),
+                    mrb_int(M, mrb_ary_entry(ary, 1)));
+  return ary;
+}
+
+mrb_value window_pos_get(mrb_state *M, mrb_value self) {
+  int w, h;
+  glfwGetWindowPos(get_window(M, self), &w, &h);
+  mrb_value const ret[] = { mrb_fixnum_value(w), mrb_fixnum_value(h) };
+  return mrb_ary_new_from_values(M, 2, ret);
+}
+
+mrb_value window_pos_set(mrb_state *M, mrb_value self) {
+  mrb_value ary;
+  mrb_get_args(M, "A", &ary);
+  glfwSetWindowPos(get_window(M, self),
+                   mrb_int(M, mrb_ary_entry(ary, 0)),
+                   mrb_int(M, mrb_ary_entry(ary, 1)));
+  return ary;
+}
+
 mrb_value default_window_hints(mrb_state*, mrb_value self) {
   return glfwDefaultWindowHints(), self;
 }
@@ -186,6 +211,9 @@ extern "C" void mrb_mruby_glfw3_gem_init(mrb_state* M) {
   mrb_define_method(M, win, "swap_buffers", swap_buffers, MRB_ARGS_NONE());
   mrb_define_method(M, win, "should_close?", should_close_p, MRB_ARGS_NONE());
   mrb_define_method(M, win, "window_size", window_size_get, MRB_ARGS_NONE());
+  mrb_define_method(M, win, "window_size=", window_size_set, MRB_ARGS_REQ(2));
+  mrb_define_method(M, win, "window_pos", window_pos_get, MRB_ARGS_NONE());
+  mrb_define_method(M, win, "window_pos=", window_pos_set, MRB_ARGS_REQ(2));
 
   int err = glfwInit();
   if (err != GL_TRUE) {
