@@ -177,6 +177,22 @@ mrb_value window_frame_size(mrb_state *M, mrb_value self) {
   return mrb_ary_new_from_values(M, 4, ret);
 }
 
+mrb_value iconify(mrb_state *M, mrb_value self) {
+  return glfwIconifyWindow(get_window(M, self)), self;
+}
+
+mrb_value restore(mrb_state *M, mrb_value self) {
+  return glfwRestoreWindow(get_window(M, self)), self;
+}
+
+mrb_value show(mrb_state *M, mrb_value self) {
+  return glfwShowWindow(get_window(M, self)), self;
+}
+
+mrb_value hide(mrb_state *M, mrb_value self) {
+  return glfwHideWindow(get_window(M, self)), self;
+}
+
 }
 
 extern "C" void mrb_mruby_glfw3_gem_init(mrb_state* M) {
@@ -231,6 +247,10 @@ extern "C" void mrb_mruby_glfw3_gem_init(mrb_state* M) {
   mrb_define_method(M, win, "window_pos=", window_pos_set, MRB_ARGS_REQ(2));
   mrb_define_method(M, win, "framebuffer_size", framebuffer_size, MRB_ARGS_NONE());
   mrb_define_method(M, win, "window_frame_size", window_frame_size, MRB_ARGS_NONE());
+  mrb_define_method(M, win, "iconify", iconify, MRB_ARGS_NONE());
+  mrb_define_method(M, win, "restore", restore, MRB_ARGS_NONE());
+  mrb_define_method(M, win, "show", show, MRB_ARGS_NONE());
+  mrb_define_method(M, win, "hide", hide, MRB_ARGS_NONE());
 
   int err = glfwInit();
   if (err != GL_TRUE) {
