@@ -162,6 +162,21 @@ mrb_value window_hint(mrb_state *M, mrb_value self) {
   return glfwWindowHint(target, hint), self;
 }
 
+mrb_value framebuffer_size(mrb_state *M, mrb_value self) {
+  int w, h;
+  glfwGetFramebufferSize(get_window(M, self), &w, &h);
+  mrb_value const ret[] = { mrb_fixnum_value(w), mrb_fixnum_value(h) };
+  return mrb_ary_new_from_values(M, 2, ret);
+}
+
+mrb_value window_frame_size(mrb_state *M, mrb_value self) {
+  int l, t, r, b;
+  glfwGetWindowFrameSize(get_window(M, self), &l, &t, &r, &b);
+  mrb_value const ret[] = { mrb_fixnum_value(l), mrb_fixnum_value(t),
+                            mrb_fixnum_value(r), mrb_fixnum_value(b) };
+  return mrb_ary_new_from_values(M, 4, ret);
+}
+
 }
 
 extern "C" void mrb_mruby_glfw3_gem_init(mrb_state* M) {
@@ -214,6 +229,8 @@ extern "C" void mrb_mruby_glfw3_gem_init(mrb_state* M) {
   mrb_define_method(M, win, "window_size=", window_size_set, MRB_ARGS_REQ(2));
   mrb_define_method(M, win, "window_pos", window_pos_get, MRB_ARGS_NONE());
   mrb_define_method(M, win, "window_pos=", window_pos_set, MRB_ARGS_REQ(2));
+  mrb_define_method(M, win, "framebuffer_size", framebuffer_size, MRB_ARGS_NONE());
+  mrb_define_method(M, win, "window_frame_size", window_frame_size, MRB_ARGS_NONE());
 
   int err = glfwInit();
   if (err != GL_TRUE) {
